@@ -1,0 +1,104 @@
+import gradio as gr
+
+def generate_video(
+    topic, goal, llm, model, image_source, image_model, tts_engine, voice,
+    include_subtitles, subtitle_font, subtitle_color,
+    stroke_width, stroke_color, subtitle_position, whisper_model
+):
+    # Placeholder function for generating video
+    return "Generated video path"
+
+with gr.Blocks(theme=gr.themes.Base()) as demo:
+    gr.Markdown("# 🚀 SocialGPT: AI-Powered Short Video Generator")
+
+    with gr.Tab("Main"):
+        with gr.Row():
+            topic = gr.Textbox(
+                label="Topic", value="Success and Achievement",
+                placeholder="Enter the topic for the video"
+            )
+            goal = gr.Textbox(
+                label="Goal", value="inspire people to overcome challenges, achieve success, and celebrate their victories",
+                placeholder="Enter the goal for the video"
+            )
+
+        with gr.Row():
+            with gr.Column(scale=1, min_width=200):
+                llm = gr.Radio(
+                    ["Gemini", "Hercai", "G4F"], label="Select Your LLM", value="Hercai"
+                )
+                model = gr.Dropdown(
+                    label="TEXT Model (Only Hercai)", value="Turbo",
+                    choices=["V3", "V3-32k", "Turbo", "Turbo-16k", "Gemini", "LLama3-70b", "LLama3-8b", "Mixtral-8x7b", "Gemma-7b", "Gemma2-9b"],
+                )
+
+            with gr.Column(scale=1, min_width=200):
+                image_source = gr.Radio(
+                    label="IMAGE SOURCE", choices=["Segmind", "Hercai"], value="Hercai"
+                )
+                image_model = gr.Dropdown(
+                    label="IMAGE MODEL (Hercai Only)", value="V3",
+                    choices=["V1", "V2", "V2-beta", "V3", "Lexica", "Prodia", "Simurg", "Animefy", "Raava", "Shonin"],
+                )
+
+            with gr.Column(scale=1, min_width=150):
+                tts_engine = gr.Radio(
+                    label="Audio Source", choices=["Elevenlabs", "TTS-1-HD"], value="Elevenlabs"
+                )
+                voice = gr.Dropdown(
+                    label="Voice",
+                    choices=["Adam", "Antoni", "Arnold", "Bella", "Domi", "Elli", "Josh", "Rachel", "Sam"],
+                    value="Rachel"
+                )
+
+        with gr.Accordion("Subtitles", open=True):
+            with gr.Row():
+                include_subtitles = gr.Checkbox(label="Include Subtitles", value=True)
+                subtitle_font = gr.Dropdown(
+                    label="Font",
+                    choices=["Arial", "Nimbus-Sans-Bold", "Courier", "Helvetica", "Times-Roman"],
+                    value="Nimbus-Sans-Bold"
+                )
+                subtitle_color = gr.ColorPicker(label="Subtitle Color", value="#FFFFFF")
+                stroke_color = gr.ColorPicker(label="Stroke Color", value="#000000")
+                stroke_width = gr.Slider(label="Stroke Width", minimum=0, maximum=10, value=3)
+                subtitle_position = gr.Dropdown(
+                    label="Subtitle Position", choices=["top", "center", "bottom"], value="center"
+                )
+                whisper_model = gr.Dropdown(
+                    label="Whisper Model", choices=["base", "small", "medium", "large", "large-v3"], value="small"
+                )
+
+        with gr.Row():
+            clear_btn = gr.Button("❌ Clear", variant="secondary", elem_id="clear-btn")
+            generate_btn = gr.Button("🎬 Generate", variant="primary", elem_id="generate-btn")
+            output_video = gr.Video(label="Generated Video", height=150)  # Adjust the height as needed
+
+        generate_btn.click(
+            generate_video,
+            inputs=[
+                topic, goal, llm, model, image_source, image_model, tts_engine, voice, include_subtitles, subtitle_font, subtitle_color, stroke_color, stroke_width, subtitle_position, whisper_model
+            ],
+            outputs=output_video
+        )
+
+    with gr.Tab("Configs"):
+        with gr.Row():
+            gemini_apikey_input = gr.Textbox(label="Gemini API Key", value="", type="password")
+            elevenlabs_apikey_input = gr.Textbox(label="ElevenLabs API Keys", value="", type="password")
+            segmind_apikey_input = gr.Textbox(label="Segmind API Key", value="", type="password")
+
+        save_apikey_btn = gr.Button("💾 Save API Keys", variant="primary")
+        save_status = gr.Textbox(label="Status", interactive=False)
+
+        def save_api_keys(gemini_key, elevenlabs_key, segmind_key):
+            # Placeholder function for saving API keys
+            return "API keys saved successfully!"
+
+        save_apikey_btn.click(
+            save_api_keys,
+            inputs=[gemini_apikey_input, elevenlabs_apikey_input, segmind_apikey_input],
+            outputs=save_status
+        )
+
+demo.launch(debug=True)
